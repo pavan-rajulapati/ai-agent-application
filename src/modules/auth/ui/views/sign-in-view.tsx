@@ -19,7 +19,6 @@ import {
 import { useForm } from "react-hook-form"
 import Link from "next/link"
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -27,9 +26,8 @@ const formSchema = z.object({
 })
 
 export const SingInView = () => {
-    const router = useRouter()
     const [error, setError] = useState<string | null>(null)
-
+    const [loading, setLoading] = useState<boolean> (false)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -39,20 +37,45 @@ export const SingInView = () => {
         },
     })
 
-    const onSubmit =  (data : z.infer<typeof formSchema>) => {
+    const onSubmit = (data: z.infer<typeof formSchema>) => {
         setError(null);
+        setLoading(true);
 
         authClient.signIn.email(
             {
                 email: data.email,
-                password : data.password
+                password: data.password,
+                callbackURL : "/"
             },
             {
-                onSuccess : () => {
-                    router.push("/")
+                onSuccess: () => {
+                    setLoading(false)
                 },
-                onError : (error) => {
+                onError: (error) => {
                     setError(error.error.message)
+                    setLoading(false)
+                }
+            }
+        )
+    }
+
+    const onSocialSubmit = (provider : "google" | "github") => {
+        setError(null);
+        setLoading(true)
+
+        authClient.signIn.social(
+            {
+                provider : provider,
+                callbackURL : "/"
+            },
+            {
+                onSuccess: () => {
+                    setLoading(false)
+                },
+                onError: (error) => {
+                    setError(error.error.message)
+                    setLoading(false)
+
                 }
             }
         )
@@ -102,27 +125,29 @@ export const SingInView = () => {
                                                 <FormMessage />
                                             </FormItem>
                                         )} />
-                                </div>
+                                </div>  
                                 {!!error && (
                                     <Alert className="bg-destructive/10 border-none">
                                         <OctagonAlertIcon className="h-4 w-4 !text-destructive" />
                                         <AlertTitle>{error}</AlertTitle>
                                     </Alert>
                                 )}
-                                <Button type="submit" className="w-full">Sign in</Button>
+                                <Button type="submit" className="w-full">{loading ? "loading.." : "Sign in"}</Button>
                                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:flex after:items-center after:border-t">
                                     <span className="bg-card text-muted-foreground relative z-10 px-2">Or continue with</span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <Button type="button" variant="outline" className="w-full">
+                                    <Button type="button" variant="outline"
+                                        onClick={() => onSocialSubmit("google")} className="w-full">
                                         Google
                                     </Button>
-                                    <Button type="button" variant="outline" className="w-full">
+                                    <Button type="button" variant="outline"
+                                        onClick={() => onSocialSubmit("github")} className="w-full">
                                         Github
                                     </Button>
                                 </div>
                                 <div className="text-center text-sm">
-                                    Don&apos;t have an account?  
+                                    Don&apos;t have an account?
                                     <Link href="/auth/sign-up" className="underline underline-offset-4 ml-1">
                                         Sign up
                                     </Link>
