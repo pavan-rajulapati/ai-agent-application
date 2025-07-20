@@ -11,7 +11,11 @@ const Page = async () => {
   if(!session) {
     redirect("/auth/sign-in")
   }
-  return <HomeView/>
+  return (
+    <div className="p-4">
+      <HomeView/>
+    </div>
+  )
 }
  
 export default Page;
