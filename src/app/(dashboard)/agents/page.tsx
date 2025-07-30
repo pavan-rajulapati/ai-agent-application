@@ -20,6 +20,7 @@ interface AgentProps {
 
 const Page = async ({ searchParams } : AgentProps) => {
   const params = await loadSearchParams(searchParams)
+  
   const session = await auth.api.getSession({
     headers: await headers(),
   });
