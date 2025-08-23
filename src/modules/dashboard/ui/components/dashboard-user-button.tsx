@@ -35,6 +35,16 @@ export const DashboardUserButton = () => {
         return null
     }
 
+    const onLogout = async () => {
+        await authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push("/auth/sign-in")
+                }
+            }
+        })
+    }
+
     if (isMobile) {
         return (
             <Drawer>
@@ -64,23 +74,14 @@ export const DashboardUserButton = () => {
                         <DrawerDescription>{data.user.email}</DrawerDescription>
                     </DrawerHeader>
                     <DrawerFooter>
-                        <Button variant="outline" onClick={() => {}}><CreditCardIcon className="size-4 text-black"/>Billing</Button>
-                        <Button variant="outline" onClick={() => {onLogout}}><LogOutIcon className="size-4 text-black"/>Logout</Button>
+                        <Button variant="outline" onClick={() => authClient.customer.portal()}><CreditCardIcon className="size-4 text-black"/>Billing</Button>
+                        <Button variant="outline" onClick={onLogout}><LogOutIcon className="size-4 text-black"/>Logout</Button>
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
         )
     }
 
-    const onLogout = async () => {
-        await authClient.signOut({
-            fetchOptions: {
-                onSuccess: () => {
-                    router.push("/auth/sign-in")
-                }
-            }
-        })
-    }
 
     return (
         <DropdownMenu>
@@ -112,7 +113,7 @@ export const DashboardUserButton = () => {
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer flex items-center justify-between">
+                <DropdownMenuItem className="cursor-pointer flex items-center justify-between" onClick={() => authClient.customer.portal()}>
                     Billing
                     <CreditCardIcon className="size-4" />
                 </DropdownMenuItem>
