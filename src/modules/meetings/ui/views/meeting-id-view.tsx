@@ -15,11 +15,11 @@ import { CancelledState } from "../components/cancelled-state";
 import { ProcessingState } from "../components/processing-state";
 import { CompletedSate } from "../components/completed-state";
 
-interface MeetingIdViewProps {
+interface Props {
     meetingId: string;
 }
 
-export const MeetingIdView = ({ meetingId }: MeetingIdViewProps) => {
+export const MeetingIdView = ({ meetingId } : Props) => {
     const trpc = useTRPC();
     const router = useRouter();
     const queryClient = useQueryClient();

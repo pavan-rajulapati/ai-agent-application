@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Alert, AlertTitle } from "@/components/ui/alert"
+import Image from "next/image";
 import {
     Form,
     FormControl,
@@ -156,7 +157,7 @@ export const SingInView = () => {
                         </form>
                     </Form>
                     <div className="bg-radial from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
-                        <img src="/logo.svg" alt="auth-logo" className="h-[92px] w-[92px]" />
+                        <Image src="/logo.svg" alt="auth-logo" className="h-[92px] w-[92px]" />
                         <p className="text-2xl font-semibold text-white">Agentic AI</p>
                     </div>
                 </CardContent>
