@@ -7,13 +7,13 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-interface MeetingIdProps {
+interface Props {
     params : Promise<{
         meetingId : string
     }>
 }
 
-const Page = async ({ params } : MeetingIdProps) => {
+const Page = async ({ params } : Props) => {
     const { meetingId } = await params;
     const queryClient = getQueryClient();
 
